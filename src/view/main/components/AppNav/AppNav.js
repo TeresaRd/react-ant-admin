@@ -30,7 +30,7 @@ class AppNav extends Component {
       </Sider>
     )
   }
- // 初始化菜单
+ // 递归遍历菜单
   getMenus = (routes) => {
     return routes.map(item => {
       if (!item.notMenu) {

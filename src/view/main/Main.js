@@ -13,7 +13,7 @@ class Main extends Component {
       <Layout className="app">
         <Spin className="page-spin" tip="pages is loading..." spinning={!!!routes.length} delay={200} />
         <AppNav/>
-        <Layout>
+        <Layout className="relative">
           <AppHeader />
           <ContentRoutes />
         </Layout>

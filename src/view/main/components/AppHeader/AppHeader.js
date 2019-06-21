@@ -8,7 +8,7 @@ const { Header } = Layout;
 class AppHeader extends Component {
   render () {
     return (
-      <Header className="bgfff cursor pl-5 pr-15">
+      <Header className="bgfff cursor pl-5 pr-15 app-header">
         <Icon
           className="trigger"
           type={this.props.layout.collapsed ? 'menu-unfold' : 'menu-fold'}

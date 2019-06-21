@@ -24,6 +24,7 @@ export default function layout (state = layout_state, action) {
         collapsed: !state.collapsed
       }
     case INITROUTE:
+      console.log(action.routes)
       return {
         ...state,
         routes: routes.concat(action.routes || [])

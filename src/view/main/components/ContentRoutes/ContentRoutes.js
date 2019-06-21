@@ -38,7 +38,7 @@ class ContentRoutes extends Component {
     const routes = this.props.routes || [];
     const _router = this.getRouter(routes, [], true);
     return (
-      <Content className="pd-10">
+      <Content className="pd-10 app-content">
         <Switch>
           {_router}
         </Switch>
