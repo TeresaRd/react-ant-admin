@@ -40,7 +40,7 @@ class AppNav extends Component {
               <Icon type="user"/>
               <span>{item.title}</span>
             </span>
-          )
+          );
           return (
             <Menu.SubMenu key={item.path} title={title}>
               {this.getMenus(item.children)}
@@ -58,21 +58,21 @@ class AppNav extends Component {
         return null;
       }
     })
-  }
+  };
 
   // 菜单状态
   openHandler = (openList) => {
     this.setState({
       openList: openList
-    })
+    });
     sessionStorage.setItem('navOpenList', JSON.stringify(openList));
-  }
+  };
   selectHandler = (config) => {
     this.setState({
       selectList: config.selectedKeys
-    })
+    });
     sessionStorage.setItem('navSelectList', JSON.stringify(config.selectedKeys));
-  }
+  };
   // 路由跳转
   menuItemHandler = (url) => {
     this.props.history.push(url);
