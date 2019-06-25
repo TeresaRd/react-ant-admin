@@ -19,11 +19,9 @@
   cursor: pointer;
   transition: color .3s;
 }
-
 .trigger:hover {
   color: #1890ff;
 }
-
 .logo {
   height: 32px;
   background: rgba(255,255,255,.2);

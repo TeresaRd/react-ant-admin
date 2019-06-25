@@ -32,7 +32,7 @@ class ContentRoutes extends Component {
       }
     }
     return AsyncComponent;
-  }
+  };
 
   render() {
     const routes = this.props.routes || [];
@@ -56,7 +56,7 @@ class ContentRoutes extends Component {
           <Route path={item.path}
              render={(props) => {
                document.title = item.title;
-               const Comp = this.getComponent(() => import('./../../../' + item.component));
+               const Comp = this.getComponent(() => import('_v/' + item.component));
                return <Comp {...props} />
              }}
              key={item.path} />
