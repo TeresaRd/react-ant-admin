@@ -13,7 +13,7 @@ class Main extends Component {
     const routes = this.props.routes || [];
     return (
       <Layout className="app">
-        <Spin className="page-spin" tip="pages is loading..." spinning={!!!routes.length} delay={200} />
+        <Spin className="page-spin" tip="pages is loading..." spinning={!routes.length} delay={200} />
         <AppNav/>
         <Layout className="relative">
           <AppHeader />
