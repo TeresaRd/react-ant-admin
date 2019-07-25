@@ -62,12 +62,14 @@ class AppNav extends Component {
 
   // 菜单状态
   openHandler = (openList) => {
+    console.log(openList)
     this.setState({
       openList: openList
     });
     sessionStorage.setItem('navOpenList', JSON.stringify(openList));
   };
   selectHandler = (config) => {
+    console.log(config.selectedKeys)
     this.setState({
       selectList: config.selectedKeys
     });

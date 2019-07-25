@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Layout } from 'antd';
+import { setOpenKeys } from "../../../../actions/layout";
 
 const { Content } = Layout;
 
@@ -46,6 +47,10 @@ class ContentRoutes extends Component {
     )
   }
 
+  shouldComponentUpdate(nextState, nextProps) {
+    return false;
+  }
+
   getRouter = (routes, result, flag) => {
     routes.forEach(item => {
       const children = Array.isArray(item.children)?item.children:[];
@@ -55,6 +60,7 @@ class ContentRoutes extends Component {
         result.push(
           <Route path={item.path}
              render={(props) => {
+               this.props.setOpenKeys(item.keys);
                document.title = item.title;
                const Comp = this.getComponent(() => import('_v/' + item.component));
                return <Comp {...props} />
@@ -68,7 +74,16 @@ class ContentRoutes extends Component {
 }
 
 function mapStateToProps (state) {
-  return state.layout;
+  return {
+    routes: state.layout.routes || []
+  };
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    setOpenKeys(openKeys) {
+      dispatch(setOpenKeys(openKeys));
+    }
+  }
 }
 
-export default connect(mapStateToProps)(withRouter(ContentRoutes));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ContentRoutes));
