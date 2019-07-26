@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { Switch, Route, withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
 import { Layout } from 'antd';
-import { setOpenKeys } from "../../../../actions/layout";
+import GlobalComponent from './RouterComponent';
 
 const { Content } = Layout;
 
 class ContentRoutes extends Component {
-  getComponent = (importComponent) => {
+  getComponent = (importComponent, openKeys) => {
     class AsyncComponent extends Component {
       constructor(props) {
         super(props);
@@ -29,7 +28,7 @@ class ContentRoutes extends Component {
       }
       render() {
         const C = this.state.component;
-        return C ? <C {...this.props} /> : null;
+        return C ? <GlobalComponent setOpenKeys={this.prop.setOpenKeys} openKeys={openKeys}><C {...this.props} /></GlobalComponent> : null;
       }
     }
     return AsyncComponent;
@@ -47,10 +46,6 @@ class ContentRoutes extends Component {
     )
   }
 
-  shouldComponentUpdate(nextState, nextProps) {
-    return false;
-  }
-
   getRouter = (routes, result, flag) => {
     routes.forEach(item => {
       const children = Array.isArray(item.children)?item.children:[];
@@ -60,12 +55,12 @@ class ContentRoutes extends Component {
         result.push(
           <Route path={item.path}
              render={(props) => {
-               this.props.setOpenKeys(item.keys);
                document.title = item.title;
-               const Comp = this.getComponent(() => import('_v/' + item.component));
-               return <Comp {...props} />
+               const Comp = this.getComponent(() => import('_v/' + item.component), item.keys);
+               return <Comp {...props}/>
              }}
-             key={item.path} />
+             key={item.path}
+          />
         )
       }
     });
@@ -73,17 +68,4 @@ class ContentRoutes extends Component {
   }
 }
 
-function mapStateToProps (state) {
-  return {
-    routes: state.layout.routes || []
-  };
-}
-function mapDispatchToProps(dispatch) {
-  return {
-    setOpenKeys(openKeys) {
-      dispatch(setOpenKeys(openKeys));
-    }
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ContentRoutes));
+export default withRouter(ContentRoutes);
