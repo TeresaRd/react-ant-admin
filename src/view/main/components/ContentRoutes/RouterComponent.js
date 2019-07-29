@@ -1,10 +1,11 @@
 import React, {Component} from "react";
 import { withRouter } from 'react-router-dom';
+import store from './../../../../store'
+import {setOpenKeys} from "../../../../actions/layout";
 
 class RouterComponent extends Component {
   render() {
     const path = this.props.match.path;
-    console.log(this.props.setOpenKeys)
     return <>
       {this.props.children}
     </>

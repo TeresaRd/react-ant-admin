@@ -7,12 +7,6 @@ import {router} from "../config/router";
 
 class RootRouter extends Component {
 
-  componentDidMount() {
-    setTimeout(() => {
-      this.props.initRoutes(router);
-    }, 2000)
-  }
-
   render () {
     return (
       <BrowserRouter>
@@ -24,16 +18,4 @@ class RootRouter extends Component {
   }
 }
 
-function mapStateToProps (state) {
-  return state;
-}
-
-function mapDispatchToProps (dispatch) {
-  return {
-    initRoutes(routes) {
-      dispatch(initRoute(routes));
-    }
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(RootRouter);
+export default RootRouter;

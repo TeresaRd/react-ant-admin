@@ -6,6 +6,7 @@ const layout_state = {
   collapsed: !!(collapsed === '1'),
   routes: routes,
   openKeys: [],
+  selectKeys: []
 };
 
 export default function layout (state = layout_state, action) {
@@ -26,6 +27,7 @@ export default function layout (state = layout_state, action) {
     case SETOPENKEYS:
       return {
         ...state,
+        selectKeys: [action.openKeys.pop()],
         openKeys: action.openKeys || []
       };
     default: return state;

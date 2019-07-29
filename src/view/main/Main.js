@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import AppNav from './components/AppNav';
 import AppHeader from './components/AppHeader';
 import ContentRoutes from './components/ContentRoutes';
-import {setOpenKeys} from "../../actions/layout";
+import {router} from "../../config/router";
+import {initRoute} from "../../actions/layout";
 
 class Main extends Component {
 
@@ -16,22 +17,32 @@ class Main extends Component {
         <AppNav/>
         <Layout className="relative">
           <AppHeader />
-          <ContentRoutes routes={this.props.routes} setOpenKyes={this.props.setOpenKeys}/>
+          <ContentRoutes routes={this.props.routes}/>
         </Layout>
       </Layout>
     );
   }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.props.initRoutes(router);
+    }, 2000)
+  }
+
 }
 
 function mapStateToProps(state) {
-  return state.layout;
-}
-function mapDispatchToProps(dispatch) {
   return {
-    setOpenKeys(keys) {
-      dispatch(setOpenKeys(keys));
-    }
-  }
+      routes: state.layout.routes
+  };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Main);
+function mapDispatch(dispatch) {
+    return {
+        initRoutes(routes) {
+            dispatch(initRoute(routes))
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatch)(Main);

@@ -6,7 +6,7 @@ import GlobalComponent from './RouterComponent';
 const { Content } = Layout;
 
 class ContentRoutes extends Component {
-  getComponent = (importComponent, openKeys) => {
+  getComponent = (importComponent, route) => {
     class AsyncComponent extends Component {
       constructor(props) {
         super(props);
@@ -28,7 +28,7 @@ class ContentRoutes extends Component {
       }
       render() {
         const C = this.state.component;
-        return C ? <GlobalComponent setOpenKeys={this.prop.setOpenKeys} openKeys={openKeys}><C {...this.props} /></GlobalComponent> : null;
+        return C ? <GlobalComponent openKeys={route.keys}><C {...this.props} /></GlobalComponent> : null;
       }
     }
     return AsyncComponent;
@@ -36,6 +36,7 @@ class ContentRoutes extends Component {
 
   render() {
     const routes = this.props.routes || [];
+    console.log(this.props.setOpenKeys)
     const _router = this.getRouter(routes, [], true);
     return (
       <Content className="pd-10 app-content">
@@ -44,6 +45,10 @@ class ContentRoutes extends Component {
         </Switch>
       </Content>
     )
+  }
+
+  shouldComponentUpdate(nextProps, nextState, nextContext) {
+    return false;
   }
 
   getRouter = (routes, result, flag) => {
@@ -56,7 +61,7 @@ class ContentRoutes extends Component {
           <Route path={item.path}
              render={(props) => {
                document.title = item.title;
-               const Comp = this.getComponent(() => import('_v/' + item.component), item.keys);
+               const Comp = this.getComponent(() => import('_v/' + item.component), item);
                return <Comp {...props}/>
              }}
              key={item.path}
