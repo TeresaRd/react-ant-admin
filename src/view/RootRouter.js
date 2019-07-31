@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Main from './main/Main';
-import { initRoute } from './../actions/layout';
-import {router} from "../config/router";
 
 class RootRouter extends Component {
 

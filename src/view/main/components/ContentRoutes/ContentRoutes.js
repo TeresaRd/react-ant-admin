@@ -1,18 +1,62 @@
 import React, { Component } from 'react';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import { Layout } from 'antd';
-import GlobalComponent from './RouterComponent';
+import { routes } from "../../../../config/router";
 
 const { Content } = Layout;
 
 class ContentRoutes extends Component {
-  getComponent = (importComponent, route) => {
+
+  render() {
+    const routes = this.props.routes || [];
+    const _router = this.getRouter(routes, [], true);
+    return (
+      <Content className="pd-10 app-content">
+        <Switch>
+          {_router}
+        </Switch>
+      </Content>
+    )
+  }
+
+  shouldComponentUpdate() {
+    if (this.props.routes.length > routes.length) {
+      return false;
+    }
+    return true;
+  }
+
+  getRouter = (routes, result, flag) => {
+    routes.forEach(item => {
+      const children = Array.isArray(item.children)?item.children:[];
+      if (children && children.length) {
+        this.getRouter(children, result);
+      } else {
+        result.push(
+          <Route path={item.path}
+             render={(props) => {
+               document.title = item.title;
+               const selectedKeys = [item.path];
+               const openKeys = item.keys.slice(0, item.keys.length-1);
+               this.props.setKeys(openKeys, selectedKeys);
+               const Comp = this.getComponent(() => import('_v/' + item.component));
+               return <Comp {...props}/>
+             }}
+             key={item.path}
+          />
+        )
+      }
+    });
+    return result;
+  };
+
+  getComponent = (importComponent) => {
     class AsyncComponent extends Component {
       constructor(props) {
         super(props);
         this.state = {
           component: null
-        }
+        };
       }
       async componentDidMount() {
         this._isMounted = true;
@@ -28,49 +72,11 @@ class ContentRoutes extends Component {
       }
       render() {
         const C = this.state.component;
-        return C ? <GlobalComponent openKeys={route.keys}><C {...this.props} /></GlobalComponent> : null;
+        return C ? <C {...this.props} /> : null;
       }
     }
     return AsyncComponent;
   };
-
-  render() {
-    const routes = this.props.routes || [];
-    console.log(this.props.setOpenKeys)
-    const _router = this.getRouter(routes, [], true);
-    return (
-      <Content className="pd-10 app-content">
-        <Switch>
-          {_router}
-        </Switch>
-      </Content>
-    )
-  }
-
-  shouldComponentUpdate(nextProps, nextState, nextContext) {
-    return false;
-  }
-
-  getRouter = (routes, result, flag) => {
-    routes.forEach(item => {
-      const children = Array.isArray(item.children)?item.children:[];
-      if (children && children.length) {
-        this.getRouter(children, result);
-      } else {
-        result.push(
-          <Route path={item.path}
-             render={(props) => {
-               document.title = item.title;
-               const Comp = this.getComponent(() => import('_v/' + item.component), item);
-               return <Comp {...props}/>
-             }}
-             key={item.path}
-          />
-        )
-      }
-    });
-    return result;
-  }
 }
 
 export default withRouter(ContentRoutes);

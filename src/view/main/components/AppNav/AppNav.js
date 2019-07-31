@@ -5,16 +5,20 @@ import { withRouter } from 'react-router-dom';
 const { Sider } = Layout;
 
 class AppNav extends Component {
+
   constructor(props) {
     super(props);
-    const openList = sessionStorage.getItem('navOpenList');
-    const selectList = sessionStorage.getItem('navSelectList');
     this.state = {
-      openList: openList ? JSON.parse(openList) : [],
-      selectList: selectList ? JSON.parse(selectList) : []
+      openList: [],
+      selectList: [],
     }
   }
-
+  componentWillReceiveProps(props) {
+    this.setState({
+      openList: props.openKeys,
+      selectList: props.selectedKeys
+    })
+  }
   render () {
     const menus = this.getMenus(this.props.routes);
     return (
@@ -24,7 +28,7 @@ class AppNav extends Component {
         collapsed={this.props.collapsed}
       >
         <div className="logo" />
-        <Menu theme="dark" mode="inline" openKeys={this.state.openList} selectedKeys={this.state.selectList} onOpenChange={this.openHandler} onSelect={this.selectHandler}>
+        <Menu theme="dark" mode="inline" openKeys={this.props.openKeys} selectedKeys={this.props.selectedKeys} onOpenChange={this.openHandler} onSelect={this.selectHandler}>
           {menus}
         </Menu>
       </Sider>
@@ -65,13 +69,13 @@ class AppNav extends Component {
     this.setState({
       openList: openList
     });
-    sessionStorage.setItem('navOpenList', JSON.stringify(openList));
+    this.props.setKeys(openList, this.state.selectList, true);
   };
   selectHandler = (config) => {
     this.setState({
       selectList: config.selectedKeys
     });
-    sessionStorage.setItem('navSelectList', JSON.stringify(config.selectedKeys));
+    this.props.setKeys(this.state.openList, config.selectedKeys);
   };
   // 路由跳转
   menuItemHandler = (url) => {
@@ -80,7 +84,9 @@ class AppNav extends Component {
 }
 
 function mapStateToProps (state) {
-  return state.layout;
+  return {
+    routes: state.layout.routes
+  };
 }
 
 export default connect(mapStateToProps)(withRouter(AppNav));

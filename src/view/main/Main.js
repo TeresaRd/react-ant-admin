@@ -9,15 +9,23 @@ import {initRoute} from "../../actions/layout";
 
 class Main extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      openKeys: [],
+      selectedKeys: []
+    }
+  }
+
   render () {
     const routes = this.props.routes || [];
     return (
       <Layout className="app">
         <Spin className="page-spin" tip="pages is loading..." spinning={!routes.length} delay={200} />
-        <AppNav/>
+        <AppNav openKeys={this.state.openKeys} selectedKeys={this.state.selectedKeys} setKeys={this.setKeys}/>
         <Layout className="relative">
           <AppHeader />
-          <ContentRoutes routes={this.props.routes}/>
+          <ContentRoutes routes={this.props.routes} setKeys={this.setKeys}/>
         </Layout>
       </Layout>
     );
@@ -28,6 +36,15 @@ class Main extends Component {
       this.props.initRoutes(router);
     }, 2000)
   }
+
+  setKeys = (openKeys, selectedKeys, flag) => {
+    if (selectedKeys[0] != this.state.selectedKeys[0] || flag) {
+      this.setState({
+        openKeys,
+        selectedKeys
+      })
+    }
+  };
 
 }
 
