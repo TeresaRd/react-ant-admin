@@ -1,7 +1,7 @@
 export const routes = [
   {
     path: '/home',
-    component: 'home',
+    component: 'home/home',
     title: '主页',
     notMenu: true,
     exact: true

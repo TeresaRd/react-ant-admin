@@ -22,7 +22,7 @@ class Main extends Component {
     return (
       <Layout className="app">
         <Spin className="page-spin" tip="pages is loading..." spinning={!routes.length} delay={200} />
-        <AppNav openKeys={this.state.openKeys} selectedKeys={this.state.selectedKeys} setKeys={this.setKeys}/>
+        <AppNav openKeys={this.state.openKeys} selectedKeys={this.state.selectedKeys} setOpenKeys={this.setOpenKeys} setSelectedKeys={this.setSelectedKeys}/>
         <Layout className="relative">
           <AppHeader />
           <ContentRoutes routes={this.props.routes} setKeys={this.setKeys}/>
@@ -37,14 +37,24 @@ class Main extends Component {
     }, 2000)
   }
 
-  setKeys = (openKeys, selectedKeys, flag) => {
-    if (selectedKeys[0] != this.state.selectedKeys[0] || flag) {
+  setKeys = (openKeys, selectedKeys) => {
+    this.setState({
+      openKeys,
+      selectedKeys
+    })
+  };
+  setOpenKeys = (openKeys) => {
+    this.setState({
+      openKeys
+    })
+  };
+  setSelectedKeys = (selectedKeys) => {
+    if (selectedKeys[0] != this.state.selectedKeys[0]) {
       this.setState({
-        openKeys,
         selectedKeys
       })
     }
-  };
+  }
 
 }
 

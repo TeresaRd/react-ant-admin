@@ -36,10 +36,7 @@ class ContentRoutes extends Component {
           <Route path={item.path}
              render={(props) => {
                document.title = item.title;
-               const selectedKeys = [item.path];
-               const openKeys = item.keys.slice(0, item.keys.length-1);
-               this.props.setKeys(openKeys, selectedKeys);
-               const Comp = this.getComponent(() => import('_v/' + item.component));
+               const Comp = this.getComponent(() => import('_v/' + item.component), item, this.props.setKeys);
                return <Comp {...props}/>
              }}
              key={item.path}
@@ -50,10 +47,14 @@ class ContentRoutes extends Component {
     return result;
   };
 
-  getComponent = (importComponent) => {
+  getComponent = (importComponent, item, setKeys) => {
     class AsyncComponent extends Component {
       constructor(props) {
         super(props);
+        const keys = item.keys || [];
+        const selectedKeys = [item.path];
+        const openKeys = keys.slice(0, keys.length-1);
+        setKeys(openKeys, selectedKeys);
         this.state = {
           component: null
         };

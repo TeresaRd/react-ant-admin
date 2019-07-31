@@ -9,15 +9,8 @@ class AppNav extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      openList: [],
-      selectList: [],
+      collapsed: false
     }
-  }
-  componentWillReceiveProps(props) {
-    this.setState({
-      openList: props.openKeys,
-      selectList: props.selectedKeys
-    })
   }
   render () {
     const menus = this.getMenus(this.props.routes);
@@ -25,7 +18,7 @@ class AppNav extends Component {
       <Sider
         trigger={null}
         collapsible
-        collapsed={this.props.collapsed}
+        collapsed={this.state.collapsed}
       >
         <div className="logo" />
         <Menu theme="dark" mode="inline" openKeys={this.props.openKeys} selectedKeys={this.props.selectedKeys} onOpenChange={this.openHandler} onSelect={this.selectHandler}>
@@ -66,16 +59,10 @@ class AppNav extends Component {
 
   // 菜单状态
   openHandler = (openList) => {
-    this.setState({
-      openList: openList
-    });
-    this.props.setKeys(openList, this.state.selectList, true);
+    this.props.setOpenKeys(openList);
   };
   selectHandler = (config) => {
-    this.setState({
-      selectList: config.selectedKeys
-    });
-    this.props.setKeys(this.state.openList, config.selectedKeys);
+    this.props.setSelectedKeys(config.selectedKeys);
   };
   // 路由跳转
   menuItemHandler = (url) => {
